@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import { DataListSession } from './service';
 
@@ -6,7 +8,10 @@ const LIST_DATA_POSITION = 'LIST_DATA_POSITION'
 
 export default class DataList extends React.Component {
     state = {
-        data: []
+        data: [],
+        hasNext: false,
+        pageIndex: this.props.pageIndex,
+        pageSize: this.props.pageSize
     }
     static defaultProps = {
         pageIndex: 0,
@@ -26,6 +31,9 @@ export default class DataList extends React.Component {
             this.fetch();
         }
     }
+    componentWillUnmount = () => {
+        window.removeEventListener('beforeunload', this.removeListSession);
+    }
     removeListSession = () => {
         this.listSession.remove(LIST_DATA)
     }
@@ -36,15 +44,25 @@ export default class DataList extends React.Component {
             window.scroll(0, position);
         })
     }
-    fetch = () => {
-        this.props.fetch().then(data => {
-            this.setState({ data: this.state.data });
+    fetch = (
+        pageIndex?: number = this.state.pageIndex,
+        pageSize?: number = this.state.pageSize
+    ) => {
+        console.log(pageIndex, pageSize, 'props fetch')
+        this.props.fetch(pageIndex, pageSize).then(data => {
+            this.setState({ data });
         })
     }
+    saveData = () => {
+        this.listSession.save(LIST_DATA, this.state);
+        this.listSession.save(LIST_DATA_POSITION, window.scrollY);
+    }
     render() {
+        const { data } = this.state;
+        if (!data.length) return <div></div>
         return (
             <React.Fragment>
-                {this.state.data.map((item, index) => this.render(item, index))}
+                {data.map((item, index) => this.render(item, index, this.saveData))}
             </React.Fragment>
         )
     }

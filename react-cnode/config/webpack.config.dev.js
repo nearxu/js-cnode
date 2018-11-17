@@ -37,7 +37,7 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
-const px2rem = require('postcss-px2rem');
+// const px2rem = require('postcss-px2rem');
 
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -64,7 +64,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             },
             stage: 3,
           }),
-          px2rem({ remUnit: 100, exclude: /node_modules/ })
+          require('postcss-px2rem')({ remUnit: 100, exclude: /node_modules/ })
+          // px2rem({ remUnit: 100, exclude: /node_modules/ })
         ],
       },
     },
@@ -152,7 +153,6 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      // '/': require('path').resolve(__dirname, '../src')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding
