@@ -21,7 +21,6 @@ export default class Home extends Component {
                 limit: pageSize
             })
                 .then(res => {
-                    console.log(res.data, 'res')
                     resolve(res.data.data);
                 })
                 .catch(err => {
@@ -42,9 +41,8 @@ export default class Home extends Component {
                             <div key={i}>
                                 <DataList
                                     fetch={this.getData.bind(this, m.url)}
-                                    id='list'
+                                    id={'list' + i}
                                     render={(data, index, saveData) => {
-                                        console.log(data, 'data')
                                         return (
                                             <ListComponent saveData={saveData} key={index} item={data} />
                                         )

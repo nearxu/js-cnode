@@ -7,12 +7,6 @@ const LIST_DATA = 'LIST_DATA';
 const LIST_DATA_POSITION = 'LIST_DATA_POSITION'
 
 export default class DataList extends React.Component {
-    state = {
-        data: [],
-        hasNext: false,
-        pageIndex: this.props.pageIndex,
-        pageSize: this.props.pageSize
-    }
     static defaultProps = {
         pageIndex: 0,
         pageSize: 10,
@@ -21,10 +15,16 @@ export default class DataList extends React.Component {
     // listSession:DataListSession
     constructor(props) {
         super(props);
+        this.state = {
+            data: [],
+            hasNext: false,
+            pageIndex: this.props.pageIndex,
+            pageSize: this.props.pageSize
+        }
         this.listSession = new DataListSession(props.id);
     }
     componentDidMount = () => {
-        window.addEventListener('beforeunload', this.removeListSession);
+        // window.addEventListener('beforeunload', this.removeListSession);
         if (this.listSession.get(LIST_DATA)) {
             this.recoveryFromSession();
         } else {
@@ -32,7 +32,7 @@ export default class DataList extends React.Component {
         }
     }
     componentWillUnmount = () => {
-        window.removeEventListener('beforeunload', this.removeListSession);
+        // window.removeEventListener('beforeunload', this.removeListSession);
     }
     removeListSession = () => {
         this.listSession.remove(LIST_DATA)
@@ -50,19 +50,21 @@ export default class DataList extends React.Component {
     ) => {
         console.log(pageIndex, pageSize, 'props fetch')
         this.props.fetch(pageIndex, pageSize).then(data => {
-            this.setState({ data });
+            this.setState({ data: this.state.data.concat(data) });
         })
     }
     saveData = () => {
+        console.log(this.state, 'state')
         this.listSession.save(LIST_DATA, this.state);
         this.listSession.save(LIST_DATA_POSITION, window.scrollY);
     }
     render() {
         const { data } = this.state;
-        if (!data.length) return <div></div>
+        const { render } = this.props;
+        if (!data.length) return <div>hello empty!!!</div>;
         return (
             <React.Fragment>
-                {data.map((item, index) => this.render(item, index, this.saveData))}
+                {data.map((item, index) => render(item, index, this.saveData))}
             </React.Fragment>
         )
     }
