@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import DataList from '../../lib/component/data-list';
 import http from '../../lib/service/http';
-import { tabs } from '../../config';
 import Tab from '../component/tab';
 import ListComponent from '../component/list';
 
@@ -13,12 +12,10 @@ export default class Home extends Component {
             data: []
         }
     }
-    getData(type, pageIndex, pageSize) {
+    getData(type = 'all') {
         return new Promise((resolve, reject) => {
             http.get('/topics', {
                 tab: type,
-                pageIndex: pageIndex,
-                limit: pageSize
             })
                 .then(res => {
                     resolve(res.data.data);
@@ -28,30 +25,23 @@ export default class Home extends Component {
                 })
         })
     }
-    toggle() {
-
+    toggle(url) {
+        this.getData(url)
     }
     render() {
         return (
             <div>
-                <Tab tabs={tabs} toggle={this.toggle.bind(this)} />
-                {
-                    tabs.map((m, i) => {
+                <Tab toggle={this.toggle.bind(this)} />
+                <DataList
+                    fetch={this.getData.bind(this)}
+                    id={'home-list'}
+                    render={(data, index, saveData) => {
+                        console.log(data, 'data');
                         return (
-                            <div key={i}>
-                                <DataList
-                                    fetch={this.getData.bind(this, m.url)}
-                                    id={'list' + i}
-                                    render={(data, index, saveData) => {
-                                        return (
-                                            <ListComponent saveData={saveData} key={index} item={data} />
-                                        )
-                                    }}
-                                />
-                            </div>
+                            <ListComponent saveData={saveData} key={index} item={data} />
                         )
-                    })
-                }
+                    }}
+                />
             </div>
         )
     }

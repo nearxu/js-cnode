@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './tab.scss';
+import { tabs } from '../../../config';
+import { withRouter } from 'react-router';
 
-export default class Tab extends Component {
+class Tab extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -10,17 +12,26 @@ export default class Tab extends Component {
     }
     toggleTab(index) {
         if (index === this.state.id) return;
-        this.props.toggle(index);
+        this.props.toggle(tabs[index].url);
+        const { router } = this.props;
+        const { location } = router;
+        const { query } = location;
+        router.replace({
+            ...location,
+            query: {
+                ...query,
+                tab: tabs[index].url
+            }
+        })
     }
     render() {
-        const { tabs } = this.props || [];
         if (!tabs.length) return <div />;
         return (
             <div className='tab-component'>
                 {
                     tabs.map((item, index) => {
                         return (
-                            <span className={index === this.state.id ? 'active' : ''} key={index} onClick={(index) => this.toggleTab(index)}>{item.name}</span>
+                            <span className={index === this.state.id ? 'active' : ''} key={index} onClick={this.toggleTab.bind(this, index)}>{item.name}</span>
                         )
                     })
                 }
@@ -28,3 +39,5 @@ export default class Tab extends Component {
         )
     }
 }
+
+export default withRouter(Tab);

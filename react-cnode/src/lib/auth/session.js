@@ -12,6 +12,9 @@ function isSessionStorageEnabled() {
 }
 
 class Session {
+    constructor() {
+        this.isSessionStorageEnabled = isSessionStorageEnabled();
+    }
     get(key) {
         let value;
         if (this.isSessionStorageEnabled) {

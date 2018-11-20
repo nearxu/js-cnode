@@ -18,8 +18,8 @@ export default class DataList extends React.Component {
         this.state = {
             data: [],
             hasNext: false,
-            pageIndex: this.props.pageIndex,
-            pageSize: this.props.pageSize
+            pageIndex: 0,
+            pageSize: 10
         }
         this.listSession = new DataListSession(props.id);
     }
@@ -48,7 +48,6 @@ export default class DataList extends React.Component {
         pageIndex?: number = this.state.pageIndex,
         pageSize?: number = this.state.pageSize
     ) => {
-        console.log(pageIndex, pageSize, 'props fetch')
         this.props.fetch(pageIndex, pageSize).then(data => {
             this.setState({ data: this.state.data.concat(data) });
         })
@@ -61,7 +60,6 @@ export default class DataList extends React.Component {
     render() {
         const { data } = this.state;
         const { render } = this.props;
-        if (!data.length) return <div>hello empty!!!</div>;
         return (
             <React.Fragment>
                 {data.map((item, index) => render(item, index, this.saveData))}

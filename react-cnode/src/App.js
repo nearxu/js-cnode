@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import './app.scss';
-import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom';
-
+import { Router, Route, hashHistory } from 'react-router';
 import Home from './page/home';
-// const Home = () => {
-//   return (
-//     <div>hello home</div>
-//   )
-// }
+
+
 const About = () => {
   return (
     <div>hello about</div>
@@ -22,17 +18,11 @@ const Detail = () => {
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router history={hashHistory}>
         <div>
-          <ul>
-            <li><Link to="/">home</Link></li>
-            <li><Link to="/about">about</Link></li>
-          </ul>
-          <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/about' component={About} />
-            <Route path='/detail/:id' component={Detail} />
-          </Switch>
+          <Route path='/' exact component={Home} />
+          <Route path='/about' component={About} />
+          <Route path='/detail/:id' component={Detail} />
         </div>
       </Router>
     )
