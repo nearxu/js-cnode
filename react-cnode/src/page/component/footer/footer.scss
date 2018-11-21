@@ -1,0 +1,22 @@
+.footer{
+    position: fixed;
+    z-index:100;
+    bottom: 0;
+    left:0;
+    right:0;
+    background: #fff;
+    .tab-component{
+        display: flex;
+        line-height: 60px;
+        background: #e5e5e5;
+        font-size:14px;
+        color:#333;
+        span{
+            flex:1;
+            text-align: center;
+        }
+        .active{
+            color:#d12f2f;
+        }
+    }
+}

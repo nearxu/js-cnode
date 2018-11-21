@@ -1,0 +1,38 @@
+.header-component{
+    background: #1E88D2;
+    height: 88px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    z-index: 11;
+    &.static {
+      position: static;
+    }
+    .back{
+        flex:1;
+        padding-left:15px;
+        .back-icon{
+            border:none;
+            border-left:2px solid #fff;
+            border-top:2px solid #fff;
+            width:12px;
+            height:12px;
+            transform: rotate(-45deg);
+            background: transparent;
+            padding:0;
+            margin:0;
+        }
+
+    }
+    .menu{
+        flex:1;
+    }
+    .title{
+        font-size:18px;
+        font-weight: normal;
+        color:#fff;
+    }
+}

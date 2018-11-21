@@ -4,6 +4,7 @@ import DataList from '../../lib/component/data-list';
 import http from '../../lib/service/http';
 import Tab from '../component/tab';
 import ListComponent from '../component/list';
+import Footer from '../component/footer';
 
 export default class Home extends Component {
     constructor(props) {
@@ -12,36 +13,38 @@ export default class Home extends Component {
             data: []
         }
     }
+    componentDidMount() {
+        this.getData();
+    }
     getData(type = 'all') {
-        return new Promise((resolve, reject) => {
-            http.get('/topics', {
-                tab: type,
-            })
-                .then(res => {
-                    resolve(res.data.data);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+        http.get('/topics', {
+            tab: type,
         })
+            .then(res => {
+                this.setState({ data: this.state.data.concat(res.data.data) })
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
     toggle(url) {
         this.getData(url)
     }
     render() {
+        const { data } = this.state;
         return (
             <div>
                 <Tab toggle={this.toggle.bind(this)} />
-                <DataList
-                    fetch={this.getData.bind(this)}
-                    id={'home-list'}
-                    render={(data, index, saveData) => {
-                        console.log(data, 'data');
-                        return (
-                            <ListComponent saveData={saveData} key={index} item={data} />
+                {/*
+                    data.length === 0 ?
+                        (<div>empty !!!!</div>) :
+                        (
+                            data.map((item, index) => {
+                                return <ListComponent key={index} item={item} />
+                            })
                         )
-                    }}
-                />
+                        */}
+                <Footer />
             </div>
         )
     }

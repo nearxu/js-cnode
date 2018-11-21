@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './app.scss';
 import { Router, Route, hashHistory } from 'react-router';
 import Home from './page/home';
-
-
+import MeComponent from './page/me';
+import Login from './page/login';
 const About = () => {
   return (
     <div>hello about</div>
@@ -15,6 +15,12 @@ const Detail = () => {
   )
 }
 
+const Register = () => {
+  return (
+    <div>hello register</div>
+  )
+}
+
 class App extends Component {
   render() {
     return (
@@ -23,6 +29,9 @@ class App extends Component {
           <Route path='/' exact component={Home} />
           <Route path='/about' component={About} />
           <Route path='/detail/:id' component={Detail} />
+          <Route path='/me' component={MeComponent} />
+          <Route path='/login' component={Login} />
+          <Route path='/register' component={Register} />
         </div>
       </Router>
     )

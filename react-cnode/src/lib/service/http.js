@@ -42,9 +42,9 @@ class Http {
     }
     static post(url, params) {
         return new Promise((resolve, reject) => {
-            instance.post(url, {
-                data: params
-            })
+            instance.post(url,
+                params
+            )
                 .then(data => {
                     resolve(data)
                 })

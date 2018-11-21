@@ -60,6 +60,7 @@ export default class DataList extends React.Component {
     render() {
         const { data } = this.state;
         const { render } = this.props;
+        if (!data.length) return <div>empty !!!</div>
         return (
             <React.Fragment>
                 {data.map((item, index) => render(item, index, this.saveData))}
