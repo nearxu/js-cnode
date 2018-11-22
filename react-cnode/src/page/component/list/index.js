@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-
+import "./list.scss";
 class ListComponent extends Component {
     constructor(props) {
         super(props);
     }
     toggleDetail(id) {
         console.log(this.props, 'props')
-        this.props.history.push('/detail/:' + id)
+        this.props.router.push('/detail/:' + id)
         this.props.saveData();
     }
     render() {
         const { item } = this.props;
         if (!item) return <div />
         return (
-            <a href="javascript:;" onClick={this.toggleDetail.bind(this, item.id)}>{item.title}</a>
+            <div className='home-list' href="javascript:;" onClick={this.toggleDetail.bind(this, item.id)}>{item.title}</div>
         )
     }
 }

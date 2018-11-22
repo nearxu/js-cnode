@@ -28,6 +28,7 @@ instance.interceptors.response.use(response => response, (err) => {
 
 class Http {
     static get(url, params) {
+        console.log(params, 'params')
         return new Promise((resolve, reject) => {
             instance.get(url, {
                 params: params

@@ -27,7 +27,14 @@ class Footer extends Component {
                     {
                         tabs.map((item, index) => {
                             return (
-                                <span className={index === this.state.id ? 'active' : ''} key={index} onClick={this.toggleTab.bind(this, index)}>{item.name}</span>
+                                <div
+                                    className={index === this.state.id ? 'active' : ''}
+                                    key={index}
+                                    onClick={this.toggleTab.bind(this, index)}
+                                >
+                                    <span>{item.name}</span>
+                                    <img src={require("../img/account_grey@2x.png")} />
+                                </div>
                             )
                         })
                     }

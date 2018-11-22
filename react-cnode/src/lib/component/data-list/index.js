@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { DataListSession } from './service';
+import Pagination from './pagination';
 
 const LIST_DATA = 'LIST_DATA';
 const LIST_DATA_POSITION = 'LIST_DATA_POSITION'
@@ -18,7 +19,7 @@ export default class DataList extends React.Component {
         this.state = {
             data: [],
             hasNext: false,
-            pageIndex: 0,
+            pageIndex: this.props.pageIndex,
             pageSize: 10
         }
         this.listSession = new DataListSession(props.id);
@@ -38,8 +39,8 @@ export default class DataList extends React.Component {
         this.listSession.remove(LIST_DATA)
     }
     recoveryFromSession = () => {
-        const { data } = this.listSession.get(LIST_DATA);
-        this.setState({ data }, () => {
+        const { data, hasNext, pageIndex } = this.listSession.get(LIST_DATA);
+        this.setState({ data, hasNext, pageIndex }, () => {
             const position = this.listSession.get(LIST_DATA_POSITION)
             window.scroll(0, position);
         })
@@ -50,6 +51,10 @@ export default class DataList extends React.Component {
     ) => {
         this.props.fetch(pageIndex, pageSize).then(data => {
             this.setState({ data: this.state.data.concat(data) });
+            const hasNext = data.length === pageSize;
+            this.setState({ hasNext }, () => {
+                console.log(this.hasNext, 'has', data, pageSize)
+            });
         })
     }
     saveData = () => {
@@ -57,13 +62,18 @@ export default class DataList extends React.Component {
         this.listSession.save(LIST_DATA, this.state);
         this.listSession.save(LIST_DATA_POSITION, window.scrollY);
     }
+    nextPage = (pageIndex) => {
+        this.fetch(pageIndex);
+        this.setState({ pageIndex })
+    }
     render() {
-        const { data } = this.state;
+        const { data, hasNext } = this.state;
         const { render } = this.props;
         if (!data.length) return <div>empty !!!</div>
         return (
             <React.Fragment>
                 {data.map((item, index) => render(item, index, this.saveData))}
+                <Pagination hasNext={hasNext} onPageChange={this.nextPage} pageIndex={this.state.pageIndex} />
             </React.Fragment>
         )
     }
